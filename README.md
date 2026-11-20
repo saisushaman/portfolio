@@ -9,7 +9,7 @@ A single-page portfolio, written as one `index.html` (GSAP + Three.js from a CDN
 - **Journey:** milestones that light up as a signal passes through them; click one for details
 - **Personal builds:** live, simulated demos of each project, with a summary of what it does and why
 - **How I get things done:** a 3D deep dive through seven questions, each with an interactive tool
-- **Agent Zero:** an on-page agent that answers questions about my work and navigates the site
+- **BIT:** an on-page agent that answers questions about my work and navigates the site
 
 ## Run locally
 

@@ -308,7 +308,7 @@ nav .logo{background:var(--accent)}
 #guide.peek .bot:hover{transform:translateX(46%)}
 #guide.out .bot{transform:translateX(8%)}
 #guide .sprite{width:72px;height:96px;display:block;transform:scaleX(-1)}  /* faces into the page */
-#guide .fw,#guide.wave .f1{display:none}#guide.wave .fw{display:inline}
+#guide .fw,#guide.waving .f1{display:none}#guide.waving .fw{display:inline}
 #guide.blink .eyes{display:none}
 #guide.out .sprite{animation:bob 1.4s ease-in-out infinite}
 @keyframes bob{50%{translate:0 -3px}}
@@ -1256,6 +1256,13 @@ section[id]{scroll-margin-top:88px}
 .jr-top h2{font-size:clamp(40px,5.6vw,92px);font-weight:700;line-height:.9;text-transform:uppercase;margin-top:6px}
 .jr-top .jr-hint{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;color:var(--dim);text-align:right;line-height:1.8;text-transform:uppercase}
 .jr-top .jr-hint b{color:var(--accent);font-weight:400}
+/* journey spacing (desktop row): dates on one line, titles sized to the column so every milestone lines up */
+@media (min-width:761px){
+  .jr-txt{margin-top:clamp(16px,2.4vh,24px)}
+  .jr-txt .when{white-space:nowrap;font-size:clamp(10px,.8vw,12px);letter-spacing:.1em}
+  .jr-txt h3{font-size:clamp(15px,1.3vw,21px);line-height:1.12;margin:8px 0 6px;text-wrap:balance}
+  .jr-txt .where{font-size:clamp(10px,.75vw,11.5px);letter-spacing:.08em;line-height:1.55}
+}
 @media (max-height:760px) and (min-width:761px){.jr-top h2{font-size:clamp(36px,4.6vw,64px)}}
 @media (max-width:760px){.jr-top h2{font-size:clamp(34px,10vw,46px)}.jr-top .jr-hint{display:none}}
 #guide .m .ans .cp{display:block;margin-top:6px;font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--gold)}
@@ -1321,7 +1328,7 @@ section[id]{scroll-margin-top:88px}
   <span class="bgk" aria-hidden="true">00</span>
   <div class="ep"><b>EP.00</b>manifesto</div>
   <!-- EDIT ME: manifesto. Wrap a word in <span class="hl"> to highlight it, or a phrase in <span class="soft"> to dim it -->
-  <p id="statement">I build <span class="hl">AI-powered applications</span>, end to end and fast. <span class="soft">New stack, new problem, new team?</span> I adapt quickly and ship something that works.</p>
+  <p id="statement">I build <span class="hl">AI-powered applications</span>, end to end and fast. A <span class="hl">systems thinker</span>, designing them to hold up in the real world. <span class="soft">New stack, problem or team?</span> Quick to adapt, ready to deliver.</p>
 </section>
 
 <!-- ============ JOURNEY: milestones (content in JOURNEY in the script, EDIT ME there) ============ -->
@@ -1426,8 +1433,8 @@ section[id]{scroll-margin-top:88px}
       <a class="btn" href="mailto:saisushamanimmagadda@gmail.com">&gt; Email</a>
       <a class="btn" href="https://www.linkedin.com/in/sushama-nimmagadda/" target="_blank" rel="noopener">&gt; LinkedIn</a>
       <a class="btn" href="https://github.com/saisushaman" target="_blank" rel="noopener">&gt; GitHub</a>
-      <!-- MOCK: put your resume at /Users/sushama/portfolio/resume.pdf -->
-      <a class="btn" href="resume.pdf" target="_blank" rel="noopener">&gt; Resume</a>
+      <!-- resume: replace resume.pdf in the repo root to update it -->
+      <a class="btn" href="resume.pdf" download="Sushama-Nimmagadda-Resume.pdf">&gt; Download resume</a>
     </div>
   </div>
 </section>
@@ -1463,13 +1470,13 @@ section[id]{scroll-margin-top:88px}
   <div class="bubble" id="gbubble">
     <div id="gtext"></div>
     <div class="chat" id="gchat">
-      <div class="chead"><span class="agent-dot"></span>Agent Zero · Sushama's minion<button type="button" class="x" id="gclose" aria-label="Close">✕</button></div>
+      <div class="chead"><span class="agent-dot"></span>BIT · Sushama's minion<button type="button" class="x" id="gclose" aria-label="Close">✕</button></div>
       <div class="msgs" id="gmsgs" aria-live="polite"></div>
       <div class="chips" id="gchips"></div>
-      <form id="gform" autocomplete="off"><input id="gin" placeholder="Ask me anything about Sushama…" aria-label="Message Agent Zero" spellcheck="false"><button type="submit" aria-label="Send">↵</button></form>
+      <form id="gform" autocomplete="off"><input id="gin" placeholder="Ask me anything about Sushama…" aria-label="Message BIT" spellcheck="false"><button type="submit" aria-label="Send">↵</button></form>
     </div>
   </div>
-  <div class="bot" id="gbot" role="button" tabindex="0" aria-label="Agent Zero, Sushama's minion — click to say hi">
+  <div class="bot" id="gbot" role="button" tabindex="0" aria-label="BIT, Sushama's minion — click to say hi">
     <svg class="sprite" id="gsprite" viewBox="0 0 12 16" shape-rendering="crispEdges"></svg>
   </div>
 </div>
@@ -1518,14 +1525,18 @@ section[id]{scroll-margin-top:88px}
   }, {passive: true});
 
   // ---------- typed subtitle ----------
-  const lines = ['engineer // builder // ships at Actual Reality', 'AI products + the tools behind them'];
-  let li = 0, ci = 0, del = false;
-  (function type(){
+  const lines = ['engineer // builder // currently shipping at Actual Reality', 'curious human // building through the AI shift'];
+  let li = 0, ci = 0, del = false, typing = false;
+  function type(){
     const t = lines[li]; $('#typed').textContent = t.slice(0, ci);
     if (!del && ci++ > t.length + 25) del = true;
     if (del && --ci <= 0) { del = false; li = (li + 1) % lines.length; }
     setTimeout(type, del ? 25 : 55);
-  })();
+  }
+  // start once the name has landed, so the first line is seen typing in full (fallback if the board never runs)
+  const startTyping = () => { if (!typing) { typing = true; type(); } };
+  addEventListener('board:landed', startTyping);
+  const waitLoader = setInterval(() => { if ($('#loader')) return; clearInterval(waitLoader); setTimeout(startTyping, 4000); }, 200);
 
   // ---------- scramble/decrypt helper ----------
   function scramble(el, final, dur = 600){
@@ -2639,22 +2650,37 @@ section[id]{scroll-margin-top:88px}
   // [Bracketed] points are placeholders: replace them with your own words.
   const JOURNEY = [
     {when: '2024 – 2025', title: "Master's in Computer Science", where: 'Bowling Green State University',
-     did: ['Completed the degree with a final project on <a href="https://github.com/saisushaman/Final_Project" target="_blank" rel="noopener">Temporal Mining ↗</a>',
+     did: ['Completed the M.S. in Computer Software Engineering with a 3.88 GPA',
+           'Final project <a href="https://github.com/saisushaman/Final_Project" target="_blank" rel="noopener">SCALAR: Temporal Mining ↗</a>: tracked how the meaning of software identifier names shifts over time, using CodeBERT embeddings and statistical analysis over more than 492,000 identifiers',
            'Explored related tech beyond the coursework, building AI projects end to end: a transformer trained from scratch, a local RAG app, NLP and translation tools',
            'Took part in multiple hackathons alongside the degree'],
      learned: ['How language models really learn, by training one from scratch', 'Taking an idea all the way to a working app, from the model to the interface']},
     {when: 'Aug 2024 – Dec 2025', title: 'Teaching Assistant', where: 'Computer Science · Bowling Green State University',
-     did: ['[Course(s) you assisted]', '[Labs, grading, office hours…]'],
-     learned: ['[One key thing teaching taught you]']},
+     did: ['Assisted in <b>6 courses</b> for <b>more than 300 students</b>, covering C and C++ programming, computer organization, Python and machine learning concepts',
+           'Ran undergraduate Computer Science lab sessions on programming, software engineering and design patterns',
+           'Mentored students on clean code, efficient algorithms, debugging and their course projects',
+           'Reviewed and debugged student code in Python and Java',
+           'Helped faculty with course preparation, grading, assessment and instructional resources, using active learning to keep students engaged'],
+     learned: []},
+    {when: 'Jan – Aug 2025', title: 'Full-Stack Intern', where: 'Senecio Corp',
+     did: ['Worked on a <b>location-based web application</b>, building its geolocation features end to end in an Agile team',
+           'Front end in React, APIs in Node.js, backed by cloud-hosted Python microservices',
+           'Tuned SQL queries so location lookups and data views responded faster',
+           'Containerized the services with Docker for reproducible local setups, shipped through GitHub Actions CI/CD',
+           '<b>Stack:</b> React · Node.js · Python · SQL · Docker · GitHub Actions'],
+     learned: []},
     {when: 'Sep 2025 – Present', title: 'AI Engineer', where: 'Actual Reality Technologies',
-     did: ['Core engineer on an AI clinical data-abstraction platform, and one of its most active contributors',
-           'Made LLM extraction <b>several times faster</b> and <b>more accurate</b> by redesigning the output format, with far fewer output tokens',
-           'Self-hosted an open-weight LLM on a GPU inference VM with vLLM, starting and stopping it on working hours to control cost',
-           'Built extraction evals with DeepEval and Langfuse, plus an LLM judge that catches negation inside the cited quote',
-           'Raised the app\'s test coverage <b>well past its 80% target</b> and gated CI on coverage floors for every component',
-           'Hardened delivery: signed releases, GitLab CI build and deploy, secret scanning, and a Playwright end-to-end suite',
-           'Built Review-Bot: Slack-triggered AI code review with headless Claude Code, with 0 duplicate reviews'],
+     did: ['Full-stack engineer on AI systems, and one of the most active contributors on the team: designing, building and shipping production LLM-backed applications with Python, TypeScript and FastAPI',
+           'Made LLM features <b>faster</b>, <b>more accurate</b> and cheaper to run, from redesigning output formats to use far fewer tokens to self-hosting open-weight models with vLLM on GPU VMs that run only during working hours',
+           'Deployed secure cloud services across Azure, AWS and GCP with Docker, Kubernetes and infrastructure as code',
+           'Built evaluation and observability for AI features with DeepEval, Langfuse and OpenTelemetry, including LLM judges that check answers against their sources',
+           'Owned quality and delivery: test coverage <b>well past its 80% target</b> with CI coverage gates, signed releases, secret scanning, Playwright end-to-end tests, and error handling with automatic fallbacks',
+           'Built internal AI tooling, such as Review-Bot: Slack-triggered AI code review with headless Claude Code, with 0 duplicate reviews'],
      learned: ['The output format is often the biggest performance lever: fewer tokens made it faster and more accurate', 'Keeping agents traced, tested and under human control, from idea to deployment', 'An AI finding is only useful if it is true: verify first, then automate']},
+    {when: 'Jan 2026 – Present', title: 'AI Engineer (Volunteer)', where: 'EmpoweredAI',
+     did: ['Designed asynchronous batch-processing pipelines and agentic workflow handlers with Python, TypeScript and REST APIs, cutting manual data work',
+           'Added structured logging, state tracking and token-usage optimization on OpenAI APIs so enterprise AI data tasks run efficiently at scale'],
+     learned: []},
     {when: 'Aug 2026 – Present', title: 'Working Group Member', where: 'Toledo Codes',
      did: ['Community builder: helping build and grow the local tech community in Toledo', "Part of the organizer working group for Northwest Ohio's tech community"],
      learned: [],
@@ -3454,22 +3480,26 @@ section[id]{scroll-margin-top:88px}
     svg.innerHTML = draw(F1, 'f1') + draw(FW, 'fw') + '<g class="eyes" fill="#ecebe6"><rect x="3" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/></g>';
 
     // EDIT ME: first line BIT says after the name lands
-    const INTRO = "Hey, I'm <b>Agent Zero</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. <b>Click me</b> anytime.";
-    const SUGGEST = ['Why hire Sushama?', 'What makes her unique?', 'Is she a fit for conversational AI?', 'Show me AI projects', 'Her journey', 'How does she work?', 'Give me the tour', 'How do I contact her?'];
+    const INTRO = "Hey, I'm <b>BIT</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. <b>Click me</b> anytime.";
+    const SUGGEST = ['Why hire Sushama?', 'What makes her unique?', 'Show me AI projects', 'Her journey', 'How does she work?', 'Give me the tour', 'How do I contact her?'];
 
-    let state = 'hidden', idleT, typeT, waveI, busy = false, tour = -1;
+    let state = 'hidden', idleT, typeT, waveI, swapT, busy = false, tour = -1;
     const setState = st => { state = st; G.classList.toggle('peek', st === 'peek'); G.classList.toggle('out', st === 'out'); };
-    function wave(ms = 1400){ clearInterval(waveI); let n = 0; waveI = setInterval(() => { G.classList.toggle('wave'); if ((n += 220) > ms) { clearInterval(waveI); G.classList.remove('wave'); } }, 220); }
+    function wave(ms = 1400){ clearInterval(waveI); let n = 0; waveI = setInterval(() => { G.classList.toggle('waving'); if ((n += 220) > ms) { clearInterval(waveI); G.classList.remove('waving'); } }, 220); }
     function resetIdle(ms = 45000){ clearTimeout(idleT); idleT = setTimeout(() => { if (document.activeElement !== gin) hide(); else resetIdle(); }, ms); }
-    function hide(){ clearTimeout(idleT); bubble.classList.remove('show', 'intro', 'agent'); setState('hidden'); }
+    function hide(){ clearTimeout(idleT); clearTimeout(swapT); clearInterval(typeT); bubble.classList.remove('show'); setState('hidden');
+      swapT = setTimeout(() => bubble.classList.remove('intro', 'agent'), 260); }   // reset the layout only once the fade-out is done
     function sayIntro(html){
-      clearInterval(typeT); bubble.classList.remove('agent'); bubble.classList.add('show', 'intro');
-      const parts = html.split(/(<[^>]+>)/); let out = '', pi = 0, ci = 0;
-      typeT = setInterval(() => {
-        if (pi >= parts.length) return clearInterval(typeT);
-        if (parts[pi].startsWith('<')) { out += parts[pi++]; ci = 0; } else if (ci < parts[pi].length) out += parts[pi][ci++]; else { pi++; ci = 0; }
-        gtext.innerHTML = out;
-      }, 16);
+      clearInterval(typeT); clearTimeout(swapT); bubble.classList.remove('agent'); bubble.classList.add('show', 'intro');
+      // lay out the whole line first (letters hidden), then reveal letter by letter: words never jump between lines while typing
+      gtext.innerHTML = html;
+      const chars = [], walk = n => [...n.childNodes].forEach(c => {
+        if (c.nodeType === 3) { const f = document.createDocumentFragment(); [...c.textContent].forEach(ch => { const s = document.createElement('span'); s.textContent = ch; s.style.visibility = 'hidden'; chars.push(s); f.appendChild(s); }); c.replaceWith(f); }
+        else walk(c);
+      });
+      walk(gtext);
+      let i = 0;
+      typeT = setInterval(() => { if (i >= chars.length) return clearInterval(typeT); chars[i++].style.visibility = ''; }, 16);
     }
 
     // ---------- agent: tools it can call on the page ----------
@@ -3507,7 +3537,7 @@ section[id]{scroll-margin-top:88px}
     // EDIT ME: who BIT is and what it may say. Voice: loyal and confident, professional answers with a nerdy
     // terminal flavour, calm when explaining the why, and a joke only where it fits. Never invents metrics.
     const PERSONA = {
-      who: "I'm <b>Agent Zero</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. I just keep the receipts.",
+      who: "I'm <b>BIT</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. I just keep the receipts.",
       catchphrase: 'Trust, but verify. She does both.',   // EDIT ME: BIT's signature line
       personal: [],   // EDIT ME: hobbies / fun facts BIT may share, e.g. 'She ...'. Empty = BIT politely keeps it to work.
     };
@@ -3588,7 +3618,7 @@ section[id]{scroll-margin-top:88px}
 
       // --- small talk & who BIT is ---
       if (/^ (hi|hey|hello|yo|sup|hiya|good (morning|afternoon|evening)) ?(bit|there)? $/.test(q)) return reply('greet', `Hey! ${PERSONA.who} Ask me why she fits your role, what she has built, or how she works.`);
-      if (has(q, ['why zero', 'agent zero', 'why are you called', 'your name mean', 'why the name'])) return reply('persona', `Zero hallucinations, zero made-up numbers, zero ego. Sushama builds her AI the same way: if it can't be verified, it doesn't ship. ${CP()}`);
+      if (has(q, ['why bit', 'why zero', 'agent zero', 'why are you called', 'your name mean', 'why the name'])) return reply('persona', `Small name, strict rules: zero hallucinations, zero made-up numbers, zero ego. Sushama builds her AI the same way: if it can't be verified, it doesn't ship. ${CP()}`);
       if (has(q, ['who are you', 'what are you', 'your name', 'what can you do', ' help '])) return reply('persona', `${PERSONA.who} I can <b>navigate</b> the site, <b>open live demos</b>, <b>walk you through how she works</b> and <b>run terminal commands</b>. Ask me anything about her.`);
       if (has(q, ['tour', 'show me around', 'walk me'])) return reply('tour', "Let's go. I'll take you section by section. Say <b>next</b> to keep going.", [['tour', 0]]);
       if (tour >= 0 && has(q, [' next', 'continue', 'go on', ' more'])) return reply('tour', '', [['tour', tour + 1]]);
@@ -3623,8 +3653,11 @@ section[id]{scroll-margin-top:88px}
 
       // --- resume, journey, current role ---
       if (has(q, [' resume', ' cv ', 'curriculum']) && !has(q, ['ats', 'genume', 'resume tool', 'resume builder', 'rewrite'])) return reply('resume', `Her resume lives in the contact section, next to email and ${LI}.`, [['navigate', '#contact']]);
-      const MS = [['master', 'degree', 'university', 'bgsu', 'bowling green', 'education', 'study', 'studied', 'graduat'], ['teaching', 'teach ', ' ta ', 'teaching assistant'], ['actual reality', 'current job', 'current role', 'currently', 'where does she work', 'works at', 'company', 'employer', 'day job'], ['toledo', 'community', 'organiz', 'working group', 'meetup']];
-      const mi = MS.findIndex(w => has(q, w));
+      // [start of the milestone's `where`, keywords]: matched by name, so adding or reordering JOURNEY never opens the wrong one
+      const MS = [['Senecio', ['senecio', 'intern', 'internship']], ['EmpoweredAI', ['empoweredai', 'empowered ai', 'volunteer']],
+        ['Bowling Green', ['master', 'degree', 'university', 'bgsu', 'bowling green', 'education', 'study', 'studied', 'graduat']], ['Computer Science', ['teaching', 'teach ', ' ta ', 'teaching assistant']],
+        ['Actual Reality', ['actual reality', 'current job', 'current role', 'currently', 'where does she work', 'works at', 'company', 'employer', 'day job']], ['Toledo', ['toledo', 'community', 'organiz', 'working group', 'meetup']]];
+      const msHit = MS.find(([, w]) => has(q, w)), mi = msHit ? JOURNEY.findIndex(j => j.where.startsWith(msHit[0])) : -1;
       if (mi >= 0 && mi < JOURNEY.length) { const jr = JOURNEY[mi], did = real(jr.did);
         return reply('journey', `<b>${jr.title}</b> · ${jr.where} (${jr.when}).${did.length ? ' ' + did.join('. ') + '.' : ''} Opening that milestone.`, [['journey', mi]]); }
       if (has(q, ['journey', 'career', 'background', 'work history', 'timeline', 'milestone', 'her experience', 'experience so far', 'how many years']) && !has(q, ['experience with', 'experience in']))
@@ -3695,8 +3728,13 @@ section[id]{scroll-margin-top:88px}
     }
 
     function openAgent(){
-      bubble.classList.remove('intro'); bubble.classList.add('show', 'agent');
-      if (!msgs.children.length) addMsg('bit', `<div class="ans">Hey! I'm <b>Agent Zero</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. Ask me anything about her work, why she fits your role, or pick one below. <i class="cp">Trust, but verify. She does both.</i></div>`);
+      clearInterval(typeT); clearTimeout(swapT);
+      const fromIntro = bubble.classList.contains('show') && !bubble.classList.contains('agent');
+      const reveal = () => { bubble.classList.remove('intro'); bubble.classList.add('agent'); requestAnimationFrame(() => requestAnimationFrame(() => bubble.classList.add('show'))); };
+      if (bubble.classList.contains('agent') && bubble.classList.contains('show')) {}   // already open
+      else if (fromIntro) { bubble.classList.remove('show'); swapT = setTimeout(reveal, 200); }   // fade the intro out, then the chat in
+      else reveal();
+      if (!msgs.children.length) addMsg('bit', `<div class="ans">Hey! I'm <b>BIT</b>, Sushama's minion. Zero hallucinations, zero made-up numbers. Ask me anything about her work, why she fits your role, or pick one below. <i class="cp">Trust, but verify. She does both.</i></div>`);
       showChips(SUGGEST.slice(0, 4)); resetIdle();
       setTimeout(() => gin.focus({preventScroll: true}), 300);
     }
@@ -3706,7 +3744,7 @@ section[id]{scroll-margin-top:88px}
     chips.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.textContent === 'stop the tour') { tour = -1; addMsg('you', 'stop the tour'); addMsg('bit', '<div class="ans">Tour stopped. What else?</div>'); showChips(SUGGEST.slice(0, 4)); return; } ask(b.textContent); });
     gin.addEventListener('input', () => resetIdle());
     gin.addEventListener('keydown', e => e.stopPropagation());   // keep site shortcuts (arrows, konami) out of the chat box
-    bot.addEventListener('click', () => { if (state === 'out') { tour = -1; clearInterval(typeT); wave(400); setTimeout(hide, 300); return; } popOut(); });   // click toggles: out <-> tucked away
+    bot.addEventListener('click', () => { if (state === 'out' && bubble.classList.contains('agent') && bubble.classList.contains('show')) { tour = -1; clearInterval(typeT); wave(400); setTimeout(hide, 300); return; } popOut(); });   // click toggles: out <-> tucked away
     bot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bot.click(); } });
     $('#gclose').addEventListener('click', () => { wave(500); setTimeout(hide, 400); });
 
@@ -3730,7 +3768,8 @@ section[id]{scroll-margin-top:88px}
     function intro(){
       if (introDone) return; introDone = true;
       G.classList.add('on');
-      setTimeout(() => { setState('out'); wave(1800); sayIntro(INTRO); clearTimeout(idleT); idleT = setTimeout(() => { if (!bubble.classList.contains('agent')) hide(); }, 6500); }, 350);
+      setTimeout(() => { if (bubble.classList.contains('agent')) return;   // chat already open: don't replace it with the intro
+        setState('out'); wave(1800); sayIntro(INTRO); clearTimeout(idleT); idleT = setTimeout(() => { if (!bubble.classList.contains('agent')) hide(); }, 6500); }, 350);
     }
     addEventListener('board:landed', intro);
     const wait = setInterval(() => { if ($('#loader')) return; clearInterval(wait); setTimeout(intro, 4500); }, 200);
